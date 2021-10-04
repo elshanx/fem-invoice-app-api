@@ -1,6 +1,8 @@
 const express = require('express')
-
 const app = express()
+const { connectDB } = require('./db/connect')
+
+const PORT = 3000
 
 app.get('/', (req, res) => {
   console.log({ req })
@@ -11,6 +13,14 @@ app.all('*', (req, res) => {
   res.status(404).send('<h1>resource not found</h1>')
 })
 
-app.listen(5000, () => {
-  console.log('server is listening on PORT 5000')
-})
+!(async function () {
+  try {
+    await connectDB()
+    console.log('connected to DATABASE')
+    app.listen(PORT, () => {
+      console.log(`server is listening on PORT:${PORT}`)
+    })
+  } catch (error) {
+    console.log(error)
+  }
+})()
