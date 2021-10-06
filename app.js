@@ -1,17 +1,30 @@
+require('express-async-errors')
 const express = require('express')
-const app = express()
 const { connectDB } = require('./db/connect')
+const morgan = require('morgan')
+const helmet = require('helmet')
+const cors = require('cors')
+const xss = require('xss-clean')
+const rateLimiter = require('express-rate-limit')
 
-const PORT = 3000
+const { invoiceRouter } = require('./routes')
 
-app.get('/', (req, res) => {
-  console.log({ req })
-  res.send('hello home page')
-})
+const app = express()
 
+app.use(express.json())
+app.use(morgan('dev'))
+
+app.use(helmet())
+app.use(cors())
+app.use(xss())
+app.use(rateLimiter({ windowMs: 60 * 1000, max: 150 }))
+
+app.use('/api/v1/invoice', invoiceRouter)
 app.all('*', (req, res) => {
   res.status(404).send('<h1>resource not found</h1>')
 })
+
+const PORT = process.env.PORT || 3000
 
 !(async function () {
   try {
