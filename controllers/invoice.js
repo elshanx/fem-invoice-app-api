@@ -44,4 +44,27 @@ const deleteInvoice = async (req, res) => {
   res.status(200).json({ status: 'success' })
 }
 
-module.exports = { getAllInvoices, getSingleInvoice, createInvoice, deleteInvoice }
+const updateInvoiceStatus = async (req, res) => {
+  const { id } = req.params
+  const status = req.body.status
+
+  const invoice = await Invoice.findOneAndUpdate(
+    { id },
+    { $set: { status: status } },
+    { upsert: false, new: true },
+  )
+
+  if (!invoice) {
+    res.status(404).json({ status: 'fail', message: `no invoices matched with id ${id}` })
+  }
+
+  res.status(200).json({ status: 'success', invoice })
+}
+
+module.exports = {
+  getAllInvoices,
+  getSingleInvoice,
+  createInvoice,
+  deleteInvoice,
+  updateInvoiceStatus,
+}
