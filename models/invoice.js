@@ -2,62 +2,76 @@ const mongoose = require('mongoose')
 
 const InvoiceSchema = new mongoose.Schema({
   id: {
-    type: 'String',
+    type: String,
+    unique: true,
   },
   createdAt: {
-    type: 'Date',
+    type: Date,
   },
   paymentDue: {
-    type: 'Date',
+    type: Date,
   },
   description: {
-    type: 'String',
+    type: String,
   },
   paymentTerms: {
-    type: 'Number',
+    type: Number,
   },
   clientName: {
-    type: 'String',
+    type: String,
   },
   clientEmail: {
-    type: 'String',
+    type: String,
   },
   status: {
-    type: 'String',
+    type: String,
   },
   senderAddress: {
     street: {
-      type: 'String',
+      type: String,
     },
     city: {
-      type: 'String',
+      type: String,
     },
     postCode: {
-      type: 'String',
+      type: String,
     },
     country: {
-      type: 'String',
+      type: String,
     },
   },
   clientAddress: {
     street: {
-      type: 'String',
+      type: String,
     },
     city: {
-      type: 'String',
+      type: String,
     },
     postCode: {
-      type: 'String',
+      type: String,
     },
     country: {
-      type: 'String',
+      type: String,
     },
   },
-  items: {
-    type: ['Mixed'],
-  },
+  items: [
+    {
+      name: {
+        type: String,
+      },
+      quantity: {
+        type: Number,
+      },
+      price: {
+        type: Number,
+      },
+      total: {
+        type: Number,
+      },
+    },
+  ],
   total: {
-    type: 'Number',
+    type: Number,
   },
 })
 

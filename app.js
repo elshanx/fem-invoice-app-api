@@ -7,7 +7,8 @@ const cors = require('cors')
 const xss = require('xss-clean')
 const rateLimiter = require('express-rate-limit')
 
-const { invoiceRouter } = require('./routes')
+const { demoInvoicesRouter } = require('./routes/demo')
+const { invoicesRouter } = require('./routes/invoices')
 
 const app = express()
 
@@ -19,12 +20,14 @@ app.use(cors())
 app.use(xss())
 app.use(rateLimiter({ windowMs: 60 * 1000, max: 150 }))
 
-app.use('/api/v1/invoice', invoiceRouter)
+app.use('/api/v1/demo/', demoInvoicesRouter)
+app.use('/api/v1/invoices', invoicesRouter)
+
 app.all('*', (req, res) => {
   res.status(404).send('<h1>resource not found</h1>')
 })
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 5000
 
 !(async function () {
   try {
